@@ -33,6 +33,7 @@ a {
   display: flex;
   flex-direction: column;
   background: var(--clico-paper);
+  overflow-x: hidden; /* guard against any wide child causing horizontal scroll */
 }
 
 .header {
@@ -72,7 +73,7 @@ a {
   gap: 10px;
   padding: 10px 20px;
   padding-bottom: max(12px, env(safe-area-inset-bottom));
-  background: var(--clico-surface);
+  background: var(--clico-paper);
   border-top: 2px solid var(--clico-ink);
 }
 .navitem {
@@ -120,6 +121,12 @@ a {
   margin: 0 0 6px;
   font-size: 15px;
   color: var(--clico-muted);
+}
+
+/* clico's display heading is 82px by default — scale it to fit phone widths. */
+.page--home .clico-display {
+  --clico-display-size: clamp(38px, 12vw, 60px);
+  overflow-wrap: break-word;
 }
 
 /* ---------- Age filter ---------- */
