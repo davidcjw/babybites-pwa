@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored, pre-built design system — not our source.
+    "vendor/**",
   ]),
 ]);
 

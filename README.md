@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BabyBites 🥄 (PWA)
 
-## Getting Started
+A mobile-first **Progressive Web App** that randomizes what to cook for your baby and grows with her — from first purées at 6 months to confident-toddler meals at 18 months+. Installable to your iPhone/Android home screen, works offline, **free to host** on Vercel.
 
-First, run the development server:
+> The PWA rebuild of the original Expo app (`../baby-bites`) — no Apple Developer account, no App Store, just a normal web deploy.
+
+## Features
+
+- **🎲 Surprise me** — one tap picks a random age-appropriate recipe.
+- **Age-band filter** — `6m · 8m · 10m · 12m · 18m+` chips (defaults to **8 months**, persisted across visits). Filtering is **band-based**: each recipe has a `[minMonths, maxMonths]` window, so smooth first-food purées drop off for older babies — a 12-month-old is *not* offered 6-month purées. Badges show the band (e.g. `6–10m` / `8m+`).
+- **Full recipes** — ingredients, step-by-step *how to cook*, texture, prep time, servings, tags. Each recipe is a **static, shareable URL** (`/recipe/<id>`).
+- **🇸🇬 Singapore recipes** — local staples (iron rice cereal, brown-rice congee, fish & spinach porridge, silken tofu with pumpkin, minced-chicken congee, silky steamed egg, papaya-banana scrape) reflecting **HPB HealthHub** + **SingHealth HealthXchange** weaning guidance, each linked to the real SG source.
+- **Source links**, **installable** (manifest + icons), and **offline** (service worker caches the app shell + recipes after first visit).
+
+## Design
+
+Built directly on the **clico-ds** design system (cream paper, 2px hard borders + hard offset shadows, pill buttons, lime CTA, Instrument Sans/Serif + JetBrains Mono). Unlike the Expo app (which had to re-implement the tokens), this PWA **imports the real clico-ds React components** — `Panel`, `Button`, `Badge`, `DisplayHeading`/`SerifAccent`. clico-ds is **vendored** under [`vendor/clico-ds`](vendor/clico-ds) (its built `dist/`) so the repo is self-contained and deploys standalone.
+
+## Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript · vanilla CSS on clico tokens · no database (recipes bundled in [`lib/recipes.ts`](lib/recipes.ts)).
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+npm run build && npm run start   # production build
+npm run lint                     # eslint
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy (free)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Push to GitHub and import into **Vercel** (zero config — it autodetects Next.js), or:
 
-## Learn More
+```bash
+npx vercel        # preview
+npx vercel --prod # production
+```
 
-To learn more about Next.js, take a look at the following resources:
+After it's live, open the URL on your iPhone in Safari → **Share → Add to Home Screen** to install it like a native app.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  layout.tsx            # clico styles + PWA metadata/manifest + SW registration + Chrome
+  page.tsx              # home randomizer (client)
+  browse/page.tsx       # age-filtered recipe list (client)
+  recipe/[id]/page.tsx  # static per-recipe page (generateStaticParams)
+  manifest.ts           # web app manifest (/manifest.webmanifest)
+  icon.svg              # favicon (spoon on a lime tile)
+  globals.css           # app styles on --clico-* tokens
+components/
+  Chrome.tsx            # header + bottom tab nav
+  AgeFilter.tsx · RecipeCard.tsx · RecipeDetail.tsx
+  ServiceWorkerRegister.tsx
+lib/
+  recipes.ts            # curated library + STAGES + band filter
+  types.ts · useAgeStage.ts  # persisted shared age selection (useSyncExternalStore)
+public/
+  sw.js                 # offline service worker (stale-while-revalidate)
+  icon-192/512(.maskable).png · apple-touch-icon.png
+vendor/clico-ds/        # vendored clico-ds dist (self-contained, MIT)
+```
 
-## Deploy on Vercel
+## Safety
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Recipe method steps are original wording; ingredient lists are factual. Always follow your paediatrician's guidance on introducing allergens and on choking-hazard textures, cook eggs/fish/meat thoroughly, and serve food just warm. The disclaimer repeats on every recipe.
