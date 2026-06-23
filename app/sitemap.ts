@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "monthly", priority: 1 },
     { url: `${SITE_URL}/browse`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/favorites`, changeFrequency: "monthly", priority: 0.5 },
   ];
   const recipes: MetadataRoute.Sitemap = RECIPES.map((r) => ({
     url: `${SITE_URL}/recipe/${r.id}`,

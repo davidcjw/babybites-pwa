@@ -324,3 +324,67 @@ a {
   line-height: 1.45;
   margin-top: 8px;
 }
+
+/* ---------- Favorites ---------- */
+/* 3 nav tabs now — keep labels on one line on narrow phones. */
+.navitem {
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.card-wrap {
+  position: relative;
+}
+/* leave room at top-right of the card for the heart toggle */
+.card-wrap .card__body {
+  padding-right: 30px;
+}
+
+.fav-btn {
+  appearance: none;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--clico-ink);
+  background: var(--clico-surface);
+  border: 2px solid var(--clico-ink);
+  border-radius: var(--clico-radius-pill);
+  box-shadow: var(--clico-shadow-sm);
+  transition: transform var(--clico-dur) var(--clico-ease);
+}
+.fav-btn[aria-pressed="true"] {
+  color: var(--clico-coral);
+}
+.fav-btn:active {
+  transform: translate(1px, 1px);
+}
+.fav-btn--card {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Empty state (e.g. no saved recipes) ---------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--clico-muted);
+}
+.empty__emoji {
+  font-size: 56px;
+  line-height: 1;
+}
+.empty__text {
+  margin: 0;
+  font-size: 16px;
+}

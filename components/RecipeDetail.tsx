@@ -3,6 +3,7 @@
 import { Badge, Button, Panel } from "clico-ds";
 import { ageBandLabel } from "@/lib/recipes";
 import type { Recipe } from "@/lib/types";
+import { FavoriteButton } from "./FavoriteButton";
 
 export function RecipeDetail({ recipe }: { recipe: Recipe }) {
   return (
@@ -24,6 +25,10 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
             {t}
           </Badge>
         ))}
+      </div>
+
+      <div className="cta-row cta-row--left">
+        <FavoriteButton id={recipe.id} variant="labeled" />
       </div>
 
       <Panel padding={20}>
