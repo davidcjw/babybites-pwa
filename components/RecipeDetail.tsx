@@ -64,6 +64,7 @@ export function RecipeDetail({ recipe }: { recipe: Recipe }) {
           as="a"
           variant="secondary"
           icon="🔗"
+          className="source-link"
           href={recipe.source.url}
           target="_blank"
           rel="noopener noreferrer"

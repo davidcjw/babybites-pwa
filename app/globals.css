@@ -207,6 +207,16 @@ a {
 .cta-row--left {
   justify-content: flex-start;
 }
+/* Source link can hold a long citation — let it wrap instead of overflowing. */
+.source-link {
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
+  align-items: flex-start;
+}
+.source-link .clico-btn__icon {
+  flex-shrink: 0;
+}
 .browse-link {
   align-self: center;
   margin-top: 14px;
