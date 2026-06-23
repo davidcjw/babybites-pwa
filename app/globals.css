@@ -33,7 +33,10 @@ a {
   display: flex;
   flex-direction: column;
   background: var(--clico-paper);
-  overflow-x: hidden; /* guard against any wide child causing horizontal scroll */
+  /* `clip` guards against wide children WITHOUT becoming a scroll container —
+     `overflow-x: hidden` would coerce overflow-y to auto and break the
+     position:sticky header + bottom nav (they'd anchor to .shell, not the viewport). */
+  overflow-x: clip;
 }
 
 .header {
