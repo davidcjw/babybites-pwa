@@ -1,8 +1,20 @@
 # BabyBites 🥄 (PWA)
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Next.js 16](https://img.shields.io/badge/Next.js-16-000000.svg?logo=next.js)
+![React 19](https://img.shields.io/badge/React-19-61dafb.svg?logo=react)
+![PWA](https://img.shields.io/badge/PWA-installable%20%C2%B7%20offline-5a0fc8.svg)
+![Deployed on Vercel](https://img.shields.io/badge/Vercel-deployed-000000.svg?logo=vercel)
+
 A mobile-first **Progressive Web App** that randomizes what to cook for your baby and grows with her — from first purées at 6 months to confident-toddler meals at 18 months+. Installable to your iPhone/Android home screen, works offline, **free to host** on Vercel.
 
 > The PWA rebuild of the original Expo app (`../baby-bites`) — no Apple Developer account, no App Store, just a normal web deploy.
+
+🔗 **Live:** https://babybites.davidcjw.com
+
+<p align="center">
+  <img src="docs/demo.gif" alt="BabyBites PWA demo — randomize a recipe, filter by age, open a recipe" width="320">
+</p>
 
 ## Features
 
@@ -70,3 +82,30 @@ vendor/clico-ds/        # vendored clico-ds dist (self-contained, MIT)
 ## Safety
 
 Recipe method steps are original wording; ingredient lists are factual. Always follow your paediatrician's guidance on introducing allergens and on choking-hazard textures, cook eggs/fish/meat thoroughly, and serve food just warm. The disclaimer repeats on every recipe.
+
+## Contributing
+
+Contributions are welcome — especially new recipes and additional regional weaning sources. Please open an issue first to discuss what you'd like to change.
+
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'feat: describe change'`)
+4. Push and open a pull request
+
+Before submitting a PR, make sure it lints and builds:
+
+```bash
+npm run lint
+npm run build
+```
+
+When adding recipes, follow the [Safety](#safety) rules and keep the `Recipe` shape in [`lib/types.ts`](lib/types.ts): original-wording method steps, factual ingredients, and a source link per recipe.
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant v2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+By participating you agree to uphold a welcoming, harassment-free environment.
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
