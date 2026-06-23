@@ -21,6 +21,7 @@ A mobile-first **Progressive Web App** that randomizes what to cook for your bab
 - **🎲 Surprise me** — one tap picks a random age-appropriate recipe.
 - **Age-band filter** — `6m · 8m · 10m · 12m · 18m+` chips (defaults to **8 months**, persisted across visits). Filtering is **band-based**: each recipe has a `[minMonths, maxMonths]` window, so smooth first-food purées drop off for older babies — a 12-month-old is *not* offered 6-month purées. Badges show the band (e.g. `6–10m` / `8m+`).
 - **Full recipes** — ingredients, step-by-step *how to cook*, texture, prep time, servings, tags. Each recipe is a **static, shareable URL** (`/recipe/<id>`).
+- **❤️ Save favorites** — tap the heart on any recipe to save it (stored locally, no account needed); view them in the **Saved** tab, which shows a live count.
 - **🇸🇬 Singapore recipes** — local staples (iron rice cereal, brown-rice congee, fish & spinach porridge, silken tofu with pumpkin, minced-chicken congee, silky steamed egg, papaya-banana scrape) reflecting **HPB HealthHub** + **SingHealth HealthXchange** weaning guidance, each linked to the real SG source.
 - **Source links**, **installable** (manifest + icons), and **offline** (service worker caches the app shell + recipes after first visit).
 

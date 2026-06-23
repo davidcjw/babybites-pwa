@@ -30,9 +30,18 @@ age-appropriate baby & toddler recipes. The PWA rebuild of the Expo app at
   babies. Keep `maxMonths` honest (99 = open-ended).
 - **Age selection** is a shared, persisted store via `useSyncExternalStore`
   (`lib/useAgeStage.ts`) — do NOT setState-in-effect (lint rule forbids it).
+- **Favorites** use the same `useSyncExternalStore` + localStorage pattern
+  (`lib/useFavorites.ts`, key `babybites.favorites`). Surfaced via
+  `components/FavoriteButton.tsx` (heart — compact on cards, labeled on detail),
+  the `/favorites` route, and a live count in the Saved nav tab. In `RecipeCard`
+  the toggle is a **sibling of the `<Link>`** (not nested) to keep valid,
+  accessible markup. New per-user persisted state should follow this store shape.
 - **Interactive pages are client components**; `recipe/[id]` is a server
   component (`generateStaticParams` → static pages) wrapping the client
   `RecipeDetail`.
+- **Use `overflow-x: clip` (not `hidden`) on layout wrappers** like `.shell`.
+  `overflow-x: hidden` coerces `overflow-y` to `auto`, making the element a
+  scroll container that breaks the `position: sticky` header + bottom nav.
 
 ## PWA
 - Manifest: `app/manifest.ts` → `/manifest.webmanifest`. Icons in `public/`
