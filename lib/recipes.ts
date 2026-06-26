@@ -272,3 +272,18 @@ export function ageBandLabel(r: Recipe): string {
 export function recipeById(id: string): Recipe | undefined {
   return RECIPES.find((r) => r.id === id);
 }
+
+/**
+ * Filter recipes whose ingredient list matches a free-text query. Each
+ * whitespace-separated term must appear (case-insensitive substring) in at
+ * least one ingredient, so "sweet potato" matches and "egg banana" finds
+ * recipes containing both. An empty/blank query returns the list unchanged.
+ */
+export function searchByIngredient(recipes: Recipe[], query: string): Recipe[] {
+  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (terms.length === 0) return recipes;
+  return recipes.filter((r) => {
+    const haystack = r.ingredients.join(" ").toLowerCase();
+    return terms.every((t) => haystack.includes(t));
+  });
+}
