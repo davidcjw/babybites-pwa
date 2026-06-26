@@ -9,8 +9,9 @@ import type { AgeStage, Recipe } from "./types";
  * on introducing allergens and on choking-hazard textures.
  *
  * Age filtering is band-based: a recipe shows only when the selected age falls
- * within [minMonths, maxMonths]. So smooth first-food purées drop off for older
- * babies — a 12-month-old won't be served 6-month purées.
+ * within [minMonths, maxMonths] AND it was introduced no earlier than the
+ * previous stage. So a recipe carries over at most one band — an 18-month-old
+ * won't be served 6-month purées even if their maxMonths is open-ended.
  */
 
 export const STAGES: AgeStage[] = [
@@ -261,7 +262,15 @@ export const RECIPES: Recipe[] = [
 ];
 
 export function recipesForAge(ageMonths: number): Recipe[] {
-  return RECIPES.filter((r) => r.minMonths <= ageMonths && ageMonths <= r.maxMonths);
+  // Only surface recipes introduced in the current band or the one just below
+  // it — an 18-month-old shouldn't be served 6-month first-food purées. `floor`
+  // is the start of the previous stage (or the current stage for the youngest).
+  const mins = STAGES.map((s) => s.minMonths).sort((a, b) => a - b);
+  const currentMin = [...mins].reverse().find((m) => m <= ageMonths) ?? mins[0];
+  const floor = [...mins].reverse().find((m) => m < currentMin) ?? currentMin;
+  return RECIPES.filter(
+    (r) => r.minMonths >= floor && r.minMonths <= ageMonths && ageMonths <= r.maxMonths,
+  );
 }
 
 /** Human age band, e.g. "6–10m" for bounded recipes or "8m+" for open-ended. */
