@@ -241,7 +241,28 @@ a {
   display: block;
 }
 .browse-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin: 8px 0 18px;
+}
+.search-input {
+  width: 100%;
+  font-family: var(--clico-font-sans);
+  font-size: 15px;
+  padding: 12px 16px;
+  border-radius: var(--clico-radius-pill);
+  border: 2px solid var(--clico-ink);
+  background: var(--clico-surface);
+  color: var(--clico-ink);
+}
+.search-input::placeholder {
+  color: var(--clico-muted);
+}
+.empty {
+  margin: 24px 0;
+  font-size: 15px;
+  color: var(--clico-muted);
 }
 .card {
   display: flex;
