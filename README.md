@@ -16,11 +16,26 @@ A mobile-first **Progressive Web App** that randomizes what to cook for your bab
   <img src="docs/demo.gif" alt="BabyBites PWA demo — randomize a recipe, filter by age, open a recipe" width="320">
 </p>
 
+## Table of Contents
+
+- [Features](#features)
+- [Design](#design)
+- [Stack](#stack)
+- [Run it](#run-it)
+- [Deploy (free)](#deploy-free)
+- [Structure](#structure)
+- [Safety](#safety)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
+
 ## Features
 
 - **🎲 Surprise me** — one tap picks a random age-appropriate recipe.
 - **Age-band filter** — `6m · 8m · 10m · 12m · 18m+` chips (defaults to **8 months**, persisted across visits). Filtering is **band-based**: each recipe has a `[minMonths, maxMonths]` window, so smooth first-food purées drop off for older babies — a 12-month-old is *not* offered 6-month purées. Badges show the band (e.g. `6–10m` / `8m+`).
 - **Full recipes** — ingredients, step-by-step *how to cook*, texture, prep time, servings, tags. Each recipe is a **static, shareable URL** (`/recipe/<id>`).
+- **🔎 Search by ingredient** — filter the Browse list by what you have (e.g. *sweet potato*, *egg banana*), combined with the active age band.
+- **🗓️ Weekly meal planner** — add recipes to a week's plan and get an **auto-generated grocery list**, deduped across recipes and grouped by supermarket aisle (`/plan`, stored locally; a live count shows in the **Plan** tab). Quantities aren't summed — it's a shopping checklist, not a calculator.
 - **❤️ Save favorites** — tap the heart on any recipe to save it (stored locally, no account needed); view them in the **Saved** tab, which shows a live count.
 - **🇸🇬 Singapore recipes** — local staples (iron rice cereal, brown-rice congee, fish & spinach porridge, silken tofu with pumpkin, minced-chicken congee, silky steamed egg, papaya-banana scrape) reflecting **HPB HealthHub** + **SingHealth HealthXchange** weaning guidance, each linked to the real SG source.
 - **Source links**, **installable** (manifest + icons), and **offline** (service worker caches the app shell + recipes after first visit).
@@ -62,18 +77,23 @@ After it's live, open the URL on your iPhone in Safari → **Share → Add to Ho
 app/
   layout.tsx            # clico styles + PWA metadata/manifest + SW registration + Chrome
   page.tsx              # home randomizer (client)
-  browse/page.tsx       # age-filtered recipe list (client)
+  browse/page.tsx       # age-filtered recipe list + ingredient search (client)
+  plan/page.tsx         # weekly meal planner + grocery list (client)
+  favorites/page.tsx    # saved recipes (client)
   recipe/[id]/page.tsx  # static per-recipe page (generateStaticParams)
   manifest.ts           # web app manifest (/manifest.webmanifest)
   icon.svg              # favicon (spoon on a lime tile)
+  opengraph-image.tsx   # generated OG / social-card image
   globals.css           # app styles on --clico-* tokens
 components/
   Chrome.tsx            # header + bottom tab nav
   AgeFilter.tsx · RecipeCard.tsx · RecipeDetail.tsx
-  ServiceWorkerRegister.tsx
+  FavoriteButton.tsx · ServiceWorkerRegister.tsx
 lib/
-  recipes.ts            # curated library + STAGES + band filter
-  types.ts · useAgeStage.ts  # persisted shared age selection (useSyncExternalStore)
+  recipes.ts            # curated library + STAGES + band filter + ingredient search
+  grocery.ts            # ingredient → aisle-grouped grocery list (no quantity summing)
+  types.ts
+  useAgeStage.ts · useFavorites.ts · usePlan.ts · useSearchQuery.ts  # persisted shared state (useSyncExternalStore + localStorage)
 public/
   sw.js                 # offline service worker (stale-while-revalidate)
   icon-192/512(.maskable).png · apple-touch-icon.png
