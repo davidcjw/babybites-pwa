@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Badge } from "clico-ds";
 import { AgeFilter } from "@/components/AgeFilter";
+import { RecipePreview } from "@/components/RecipePreview";
 import { buildGroceryList } from "@/lib/grocery";
 import { ageBandLabel, recipeById, recipesForAge } from "@/lib/recipes";
 import { useAgeStage } from "@/lib/useAgeStage";
@@ -11,6 +13,8 @@ import { usePlan } from "@/lib/usePlan";
 export default function PlanPage() {
   const { stageId, stage, select } = useAgeStage();
   const { plan, inPlan, toggle, remove, clear, count } = usePlan();
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const previewRecipe = previewId ? recipeById(previewId) : undefined;
 
   // Planned recipes, in the order they were added.
   const planned = plan.map(recipeById).filter((r) => r !== undefined);
@@ -94,15 +98,22 @@ export default function PlanPage() {
             const added = inPlan(r.id);
             return (
               <li key={r.id} className="plan-row">
-                <span className="plan-row__emoji" aria-hidden>
-                  {r.emoji}
-                </span>
-                <div className="plan-row__body">
-                  <span className="plan-row__title">{r.title}</span>
-                  <Badge tone="mint" mono>
-                    {ageBandLabel(r)}
-                  </Badge>
-                </div>
+                <button
+                  type="button"
+                  className="plan-row__preview"
+                  onClick={() => setPreviewId(r.id)}
+                  aria-label={`Preview ${r.title}`}
+                >
+                  <span className="plan-row__emoji" aria-hidden>
+                    {r.emoji}
+                  </span>
+                  <div className="plan-row__body">
+                    <span className="plan-row__title">{r.title}</span>
+                    <Badge tone="mint" mono>
+                      {ageBandLabel(r)}
+                    </Badge>
+                  </div>
+                </button>
                 <button
                   type="button"
                   className={`plan-add${added ? " plan-add--on" : ""}`}
@@ -117,6 +128,15 @@ export default function PlanPage() {
           })}
         </ul>
       </section>
+
+      {previewRecipe && (
+        <RecipePreview
+          recipe={previewRecipe}
+          added={inPlan(previewRecipe.id)}
+          onToggle={() => toggle(previewRecipe.id)}
+          onClose={() => setPreviewId(null)}
+        />
+      )}
     </div>
   );
 }
