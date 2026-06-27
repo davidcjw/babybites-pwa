@@ -246,6 +246,11 @@ a {
   gap: 12px;
   margin: 8px 0 18px;
 }
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
 .search-input {
   width: 100%;
   font-family: var(--clico-font-sans);
@@ -256,8 +261,32 @@ a {
   background: var(--clico-surface);
   color: var(--clico-ink);
 }
+.search-field .search-input {
+  padding-right: 44px;
+}
 .search-input::placeholder {
   color: var(--clico-muted);
+}
+/* Hide the native search clear control — we render our own labelled button. */
+.search-input::-webkit-search-cancel-button {
+  appearance: none;
+}
+.search-clear {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+  border: none;
+  border-radius: var(--clico-radius-pill);
+  background: var(--clico-ink);
+  color: var(--clico-surface);
+  cursor: pointer;
 }
 .empty {
   margin: 24px 0;
