@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { AgeFilter } from "@/components/AgeFilter";
 import { RecipeCard } from "@/components/RecipeCard";
 import { recipesForAge, searchByIngredient } from "@/lib/recipes";
 import { useAgeStage } from "@/lib/useAgeStage";
+import { useSearchQuery } from "@/lib/useSearchQuery";
 import type { PanelTone } from "clico-ds";
 
 const TONES: PanelTone[] = ["mint", "butter", "peach", "lilac", "surface"];
 
 export default function BrowsePage() {
   const { stageId, stage, select } = useAgeStage();
-  const [query, setQuery] = useState("");
+  const { query, setQuery, clear } = useSearchQuery();
 
   const ageRecipes = recipesForAge(stage.minMonths);
   const recipes = searchByIngredient(ageRecipes, query);
@@ -27,14 +27,26 @@ export default function BrowsePage() {
       </p>
 
       <div className="browse-filter">
-        <input
-          type="search"
-          className="search-input"
-          placeholder="Search by ingredient — e.g. sweet potato"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label="Search recipes by ingredient"
-        />
+        <div className="search-field">
+          <input
+            type="search"
+            className="search-input"
+            placeholder="Search by ingredient — e.g. sweet potato"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search recipes by ingredient"
+          />
+          {trimmed && (
+            <button
+              type="button"
+              className="search-clear"
+              onClick={clear}
+              aria-label="Clear search"
+            >
+              ×
+            </button>
+          )}
+        </div>
         <AgeFilter selected={stageId} onSelect={select} />
       </div>
 
