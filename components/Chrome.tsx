@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import { useFavorites } from "@/lib/useFavorites";
 import { usePlan } from "@/lib/usePlan";
@@ -9,6 +9,7 @@ import { usePlan } from "@/lib/usePlan";
 /** App shell: sticky header + bottom tab nav, wrapping each page. */
 export function Chrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { count } = useFavorites();
   const { count: planCount } = usePlan();
   const isDetail = pathname.startsWith("/recipe/");
@@ -21,9 +22,18 @@ export function Chrome({ children }: { children: ReactNode }) {
     <div className="shell">
       <header className="header">
         {isDetail ? (
-          <Link href="/" className="header__back">
+          <button
+            type="button"
+            className="header__back"
+            onClick={() => {
+              // Return to wherever the user came from (Browse, Plan, Saved…),
+              // falling back to home if the recipe was opened directly.
+              if (window.history.length > 1) router.back();
+              else router.push("/");
+            }}
+          >
             ← Back
-          </Link>
+          </button>
         ) : (
           <Link href="/" className="wordmark">
             Baby<span className="wordmark__serif">Bites</span> 🥄
