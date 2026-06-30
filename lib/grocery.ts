@@ -127,6 +127,23 @@ function canonicalize(ingredient: string): { name: string; aisle: Aisle } | null
   return { name, aisle: "Other" };
 }
 
+/**
+ * Render a grocery list as plain text for the clipboard / sharing.
+ * Aisles become headers; items become bullet lines, with "(x2)" when an item
+ * is used across multiple planned recipes (matching the on-screen "·2×").
+ */
+export function groceryListToText(sections: GrocerySection[]): string {
+  const body = sections
+    .map((s) => {
+      const lines = s.items
+        .map((it) => `- ${it.name}${it.recipes.length > 1 ? ` (x${it.recipes.length})` : ""}`)
+        .join("\n");
+      return `${s.aisle}\n${lines}`;
+    })
+    .join("\n\n");
+  return `Grocery list\n\n${body}`;
+}
+
 export function buildGroceryList(recipes: Recipe[]): GrocerySection[] {
   const map = new Map<string, GroceryItem>(); // key: `${aisle}|${name}`
   for (const r of recipes) {

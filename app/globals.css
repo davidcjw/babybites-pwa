@@ -480,7 +480,8 @@ a {
   align-items: baseline;
   justify-content: space-between;
 }
-.plan-clear {
+.plan-clear,
+.plan-copy {
   border: none;
   background: none;
   cursor: pointer;

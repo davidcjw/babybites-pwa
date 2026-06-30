@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Badge } from "clico-ds";
 import { AgeFilter } from "@/components/AgeFilter";
 import { RecipePreview } from "@/components/RecipePreview";
-import { buildGroceryList } from "@/lib/grocery";
+import { buildGroceryList, groceryListToText } from "@/lib/grocery";
 import { ageBandLabel, recipeById, recipesForAge } from "@/lib/recipes";
 import { useAgeStage } from "@/lib/useAgeStage";
 import { usePlan } from "@/lib/usePlan";
@@ -14,6 +14,7 @@ export default function PlanPage() {
   const { stageId, stage, select } = useAgeStage();
   const { plan, inPlan, toggle, remove, clear, count } = usePlan();
   const [previewId, setPreviewId] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const previewRecipe = previewId ? recipeById(previewId) : undefined;
 
   // Planned recipes, in the order they were added.
@@ -22,6 +23,32 @@ export default function PlanPage() {
   const itemCount = grocery.reduce((n, s) => n + s.items.length, 0);
 
   const picker = recipesForAge(stage.minMonths);
+
+  async function copyGrocery() {
+    const text = groceryListToText(grocery);
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(text);
+      ok = true;
+    } catch {
+      // Fallback for browsers/contexts without the async clipboard API.
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        ok = document.execCommand("copy");
+      } catch {
+        ok = false;
+      }
+      document.body.removeChild(ta);
+    }
+    if (!ok) return; // don't claim success if the copy actually failed
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1500);
+  }
 
   return (
     <div className="page">
@@ -65,7 +92,17 @@ export default function PlanPage() {
 
       {grocery.length > 0 && (
         <section className="plan-section">
-          <p className="section-label">GROCERY LIST</p>
+          <div className="plan-section__head">
+            <p className="section-label">GROCERY LIST</p>
+            <button
+              type="button"
+              className="plan-copy"
+              onClick={copyGrocery}
+              aria-label={copied ? "Grocery list copied" : "Copy grocery list"}
+            >
+              {copied ? "Copied ✓" : "Copy"}
+            </button>
+          </div>
           {grocery.map((s) => (
             <div key={s.aisle} className="grocery-aisle">
               <h3 className="grocery-aisle__name">{s.aisle}</h3>
