@@ -27,8 +27,9 @@ export default function HomePage() {
   const pool = useMemo(() => recipesForAge(stage.minMonths), [stage.minMonths]);
   const [picked, setPicked] = useState<Recipe | null>(null);
 
-  // Show a recipe immediately for the current pool (re-derives when age changes).
-  const shown = picked && pool.some((r) => r.id === picked.id) ? picked : pool[0] ?? null;
+  // Show a recipe immediately for the current pool (re-derives, randomly, when age changes).
+  const fallback = useMemo(() => pickRandom(pool), [pool]);
+  const shown = picked && pool.some((r) => r.id === picked.id) ? picked : fallback;
 
   const handleAge = (id: string) => {
     select(id);
